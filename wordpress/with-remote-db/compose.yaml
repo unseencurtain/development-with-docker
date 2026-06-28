@@ -1,0 +1,20 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-dev
+    restart: unless-stopped
+    ports:
+      - "6500:80"
+
+    environment:
+      WORDPRESS_DB_HOST: 192.168.0.102:3306   # Raspberry Pi
+      WORDPRESS_DB_NAME: wordpress-1
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+
+    volumes:
+      # Entire WordPress install
+      - ./project_1:/var/www/html
+
+      # Optional custom PHP settings
+      # - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
