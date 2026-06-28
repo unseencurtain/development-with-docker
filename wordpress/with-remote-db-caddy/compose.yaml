@@ -1,0 +1,38 @@
+services:
+  caddy:
+    image: caddy:latest
+    container_name: wordpress-caddy
+    restart: unless-stopped
+
+    ports:
+      - "6500:80"
+      - "6501:443"
+
+    volumes:
+      - ./project_1:/srv
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+    depends_on:
+      - wordpress
+
+
+
+  wordpress:
+    image: wordpress:php8.3-fpm
+    container_name: wordpress-dev
+    restart: unless-stopped
+    ports:
+      - "6500:80"
+
+    environment:
+      WORDPRESS_DB_HOST: 192.168.0.102:3306   # Raspberry Pi
+      WORDPRESS_DB_NAME: wordpress-1
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+
+    volumes:
+      # Entire WordPress install
+      - ./project_1:/srv
+
+      # Optional custom PHP settings
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
